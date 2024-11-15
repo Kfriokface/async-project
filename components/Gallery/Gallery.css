@@ -1,0 +1,32 @@
+/* Archivo style.css */
+.masonry {
+  column-count: 4; /* Número de columnas */
+  column-gap: 16px; /* Espacio entre columnas */
+  width: 90%;
+  margin: 0 auto;
+}
+
+.masonry-item {
+  background-color: #eee;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.masonry-item img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry {
+    column-count: 1;
+  }
+}
