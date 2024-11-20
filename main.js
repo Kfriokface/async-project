@@ -41,14 +41,18 @@ const searchPhotos = async (keyword, reset = false) => {
   const apiUrl = buildApiUrl(keyword, page);
   try {
     loading.style.display = 'block';
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      headers: { Authorization: 'Client-ID TU_API_KEY' }
+    });
+
     const data = await response.json();
+    console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
 
     if (reset) {
       imageContainer.innerHTML = '';
       loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
     }
-    
+
     // Se mandan los resultados al constructor de la galería
     galleryPhotos(imageContainer, data.results);
 
