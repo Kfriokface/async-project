@@ -24,15 +24,21 @@ export const Gallery = () => {
   main.appendChild(loading);
 };
 
+export const loadedImageIds = new Set();
+
 export const galleryPhotos = (container, photos) => {
   photos.forEach(photo => {
-    const photoDiv = document.createElement('div');
-    photoDiv.classList.add('masonry-item');
-    const img = document.createElement('img');
-    img.src = photo.urls.small;
-    img.alt = photo.alt_description || 'Unsplash Image';
-    img.setAttribute('loading', 'lazy');
-    photoDiv.appendChild(img);
-    container.appendChild(photoDiv);
+    if (!loadedImageIds.has(photo.id)) {
+      const photoDiv = document.createElement('div');
+      photoDiv.classList.add('masonry-item');
+      const img = document.createElement('img');
+      img.src = photo.urls.small;
+      img.alt = photo.alt_description || 'Unsplash Image';
+      img.setAttribute('loading', 'lazy');
+      photoDiv.appendChild(img);
+      container.appendChild(photoDiv);
+
+      loadedImageIds.add(photo.id);
+    }
   });
 }
