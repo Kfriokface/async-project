@@ -48,10 +48,9 @@ const searchPhotos = async (keyword, reset = false) => {
       imageContainer.innerHTML = '';
       loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
     }
-
-
+    
+    // Se mandan los resultados al constructor de la galería
     galleryPhotos(imageContainer, data.results);
-
 
     page++;
   } catch (error) {

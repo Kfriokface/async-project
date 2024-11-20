@@ -1,13 +1,5 @@
 import './Gallery.css';
 
-// export const printPhotos = (photos) => {
-//   for (const photo of photos) {
-//     masonryContainer.innerHTML += `
-//     <img src="${photo.urls.regular}" alt="${photo.alt_description}" loading="lazy" />
-//     `;
-//   }
-// };
-
 export const Gallery = () => {
   const main = document.querySelector('main');
   // Creo en contenedor para las imágenes
