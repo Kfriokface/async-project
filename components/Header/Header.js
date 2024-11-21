@@ -1,17 +1,19 @@
 import './Header.css';
 
 const headerContent = () => `
-  <section class="header__wrapper">
-    <figure class="logo">FotomaTown</figure>
-    <form id="searchPhotos" class="search" method="get" role="search" aria-label="Encuentra imágenes PhotoMaTown" action="/s">
-      <div class="search__wrapper">
-        <input type="search" name="searchKeyword" placeholder="Buscar fotos e ilustraciones" title="Buscar en PhotoMaTown" class="search__input" required value="">
-        <button title="Buscar en PhotoMaTown" class="search__btn" type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
+  <div class="header__wrapper">
+    <figure class="header__logo">
+      <img src="../../assets/images/fotomatown.svg" alt="Fotomatown"/>
+    </figure>
+    <form id="searchPhotos" class="header__search" method="get" role="search" aria-label="Encuentra imágenes PhotoMaTown" action="/s">
+      <div class="header__search-wrapper">
+        <input type="search" name="searchKeyword" placeholder="Ej: Darth Vader" title="Buscar en PhotoMaTown" class="header__search-input" required value="">
+        <button title="Buscar en PhotoMaTown" class="header__search-btn" type="submit">
+          <span class="material-icons">search</span>
         </button>   
       </div>
     </form>
-  </section>
+  </div>
 `;
 
 export const Header = () => {

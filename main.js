@@ -13,10 +13,11 @@ const imageContainer = document.querySelector('#image-container');
 const loading = document.querySelector('#loading');
 const searchForm = document.querySelector('#searchPhotos');
 const input = document.querySelector('#searchPhotos input');
+const filtersBtn = document.querySelector('#filterBtn');
 const filtersContainer = document.querySelector('#filters');
 const orientationSelect = document.querySelector('#orientation');
 const colorSelect = document.querySelector('#color');
-const applyFiltersButton = document.querySelector('#applyFilters');
+const applyFiltersBtn = document.querySelector('#applyFilters');
 
 let page = 1; // Página inicial
 const perPage = 20; // Número de imágenes por página
@@ -40,23 +41,27 @@ const buildApiUrl = (query, page) => {
 const searchPhotos = async (keyword, reset = false) => {
   const apiUrl = buildApiUrl(keyword, page);
   try {
-    loading.style.display = 'block';
     const response = await fetch(apiUrl, {
       headers: { Authorization: 'Client-ID TU_API_KEY' }
     });
 
     const data = await response.json();
-    console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
 
-    if (reset) {
-      imageContainer.innerHTML = '';
-      loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
+    if (!data.results.length) {
+      console.log("Busca otra cosa por favor");
     }
-
-    // Se mandan los resultados al constructor de la galería
-    galleryPhotos(imageContainer, data.results);
-
-    page++;
+    else {
+      console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
+      loading.style.display = 'block';
+      if (reset) {
+        imageContainer.innerHTML = '';
+        loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
+      }  
+      // Se mandan los resultados al constructor de la galería
+      galleryPhotos(imageContainer, data.results);
+      filtersBtn.style.display = 'flex'; // Mostrar los filtros después de buscar
+      page++;
+    }
   } catch (error) {
     console.error('Error al cargar imágenes:', error);
   } finally {
@@ -67,18 +72,17 @@ const searchPhotos = async (keyword, reset = false) => {
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
-  currentQuery = input.value.trim(); // Obtener el término de búsqueda y lo almacena
+  currentQuery = input.value.trim();  // Obtener el término de búsqueda y lo almacena
   currentOrientation = ''; // Reiniciar orientación
   currentColor = ''; // Reiniciar color
   page = 1; // Reiniciar a la primera página
 
   searchPhotos(currentQuery, true); //Carga imágenes iniciales con el keyword
-  filtersContainer.style.display = 'block'; // Mostrar los filtros después de buscar
   input.value = '';
 });
 
 // Evento para manejar la aplicación de filtros
-applyFiltersButton.addEventListener('click', () => {
+applyFiltersBtn.addEventListener('click', () => {
   currentOrientation = orientationSelect.value; // Obtener orientación seleccionada
   currentColor = colorSelect.value; // Obtener color seleccionado
   page = 1; // Reiniciar a la primera página
