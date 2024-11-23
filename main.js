@@ -72,6 +72,7 @@ const fetchRemainingCalls = async () => {
     const response = await fetch(`https://api.unsplash.com/photos?client_id=${apiKey}`, {
       headers: {
         Authorization: apiKey,
+        'Cache-Control': 'no-cache' // Evita respuestas almacenada 
       }
     });
     console.log(response.headers);
