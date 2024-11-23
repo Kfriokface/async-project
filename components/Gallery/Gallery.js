@@ -4,8 +4,8 @@ export const Gallery = () => {
   const main = document.querySelector('main');
   // Creo en contenedor para las imágenes
   const gallery = document.createElement('div');
-  gallery.id = 'image-container';
-  gallery.classList.add('image-container', 'masonry');
+  gallery.id = 'galleryContainer';
+  gallery.classList.add('gallery');
   main.appendChild(gallery);
   // Creo el contenedor para mostrar la info de carga
   const loading = document.createElement('div');
@@ -22,7 +22,7 @@ export const galleryPhotos = (container, photos) => {
   photos.forEach(photo => {
     if (!loadedImageIds.has(photo.id)) {
       const photoDiv = document.createElement('div');
-      photoDiv.classList.add('masonry-item');
+      photoDiv.classList.add('gallery-item');
       const img = document.createElement('img');
       img.src = photo.urls.small;
       img.alt = photo.alt_description || 'Unsplash Image';

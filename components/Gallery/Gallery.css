@@ -1,32 +1,35 @@
-/* Archivo style.css */
-.masonry {
+.gallery {
   column-count: 4; /* Número de columnas */
   column-gap: 16px; /* Espacio entre columnas */
   width: 90%;
-  margin: 0 auto;
+  margin: 7rem auto 15rem;
 }
 
-.masonry-item {
+body.filters-on .gallery {
+  margin-top: 9rem;
+}
+
+.gallery-item {
   background-color: #eee;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
 }
 
-.masonry-item img {
+.gallery-item img {
   width: 100%;
   display: block;
   border-radius: 8px;
 }
 
 @media (max-width: 768px) {
-  .masonry {
+  .gallery {
     column-count: 2;
   }
 }
 
 @media (max-width: 480px) {
-  .masonry {
+  .gallery {
     column-count: 1;
   }
 }

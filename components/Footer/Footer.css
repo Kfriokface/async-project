@@ -1,0 +1,19 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.footer__pattern {
+  background: url(../../assets/images/city_pattern.svg) repeat-x;
+  height: 110px;
+}
+
+.footer__text {
+  padding: 2rem;
+  background-color: var(--dark);
+  text-align: center;
+}

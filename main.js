@@ -3,13 +3,15 @@ import './style.css';
 import { Header } from './components/Header/Header';
 import { Filters } from './components/Filters/Filters';
 import { Gallery, loadedImageIds, galleryPhotos } from './components/Gallery/Gallery';
+import { Footer } from './components/Footer/Footer';
 
 Header();
 Filters();
 Gallery();
+Footer();
 
 const apiKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
-const imageContainer = document.querySelector('#image-container');
+const imageContainer = document.querySelector('#galleryContainer');
 const loading = document.querySelector('#loading');
 const searchForm = document.querySelector('#searchPhotos');
 const input = document.querySelector('#searchPhotos input');
@@ -41,17 +43,12 @@ const buildApiUrl = (query, page) => {
 const searchPhotos = async (keyword, reset = false) => {
   const apiUrl = buildApiUrl(keyword, page);
   try {
-    const response = await fetch(apiUrl, {
-      headers: { Authorization: 'Client-ID TU_API_KEY' }
-    });
-
+    const response = await fetch(apiUrl);
     const data = await response.json();
-
     if (!data.results.length) {
       console.log("Busca otra cosa por favor");
     }
     else {
-      console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
       loading.style.display = 'block';
       if (reset) {
         imageContainer.innerHTML = '';
@@ -60,6 +57,7 @@ const searchPhotos = async (keyword, reset = false) => {
       // Se mandan los resultados al constructor de la galería
       galleryPhotos(imageContainer, data.results);
       filtersBtn.style.display = 'flex'; // Mostrar los filtros después de buscar
+      document.body.classList.add('filters-on');
       page++;
     }
   } catch (error) {
@@ -68,6 +66,41 @@ const searchPhotos = async (keyword, reset = false) => {
     loading.style.display = 'none'; // Ocultar "Cargando..."
   }
 }
+
+const fetchRemainingCalls = async () => {
+  try {
+    const response = await fetch(`https://api.unsplash.com/photos?client_id=${apiKey}`, {
+      headers: {
+        Authorization: apiKey,
+      }
+    });
+    console.log(response.headers);
+    console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
+    const remainingCalls = response.headers.get('X-Ratelimit-Remaining');
+    return remainingCalls;
+  } catch (error) {
+    console.error('Error al obtener las llamadas restantes:', error);
+    return null;
+  }
+}
+
+const updateRemainingCallsDisplay = (remainingCalls) => {
+  const displayElement = document.querySelector('#remainingCalls');
+  if (remainingCalls !== null) {
+    displayElement.textContent = `Llamadas restantes: ${remainingCalls}`;
+  } else {
+    displayElement.textContent = 'Error al obtener el número de llamadas restantes.';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Obtén el número de llamadas restantes
+  const remainingCalls = await fetchRemainingCalls();
+
+  // Actualiza el componente con el valor obtenido
+  updateRemainingCallsDisplay(remainingCalls);
+});
+
 
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
@@ -79,6 +112,11 @@ searchForm.addEventListener('submit', event => {
 
   searchPhotos(currentQuery, true); //Carga imágenes iniciales con el keyword
   input.value = '';
+});
+
+// muestra los filtrod
+filtersBtn.addEventListener('click', () => {
+  filtersContainer.style.display = 'flex';
 });
 
 // Evento para manejar la aplicación de filtros
@@ -100,5 +138,3 @@ const handleScroll = () => {
 
 // Escuchar el evento de scroll
 window.addEventListener('scroll', handleScroll);
-
-

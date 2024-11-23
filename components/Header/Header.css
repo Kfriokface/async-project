@@ -1,7 +1,4 @@
-.header__wrapper {
-  display: flex;
-	justify-content: space-between;
-	align-items: center;
+header {
 	position: fixed;
 	top: 0;
   left: 0;
@@ -10,9 +7,26 @@
 	padding: 1rem;
 }
 
+.header__wrapper {
+  display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .header__logo {
   padding: 0;
   margin: 0;
+}
+
+.header__search {
+  flex-basis: 50%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.header__search form {
+  width: 100%;
 }
 
 .header__search-wrapper {
@@ -34,6 +48,7 @@
   background: var(--lightgrey);
   padding: .5rem 1rem .5rem 3rem;
   border-radius: 50px;
+  width: 100%;
 }
 
 .header__search-input:focus-visible {

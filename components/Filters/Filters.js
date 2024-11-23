@@ -36,7 +36,7 @@ export const Filters = () => {
   filterBtn.id = 'filterBtn';
   filterBtn.style.display = 'none';
   filterBtn.innerHTML = filtersIcon();
-  document.querySelector(".header__search-wrapper").append(filterBtn);
+  document.querySelector(".header__search").append(filterBtn);
   //contenedor de filtros
   const filter = document.createElement('section');
   filter.id = 'filters';
