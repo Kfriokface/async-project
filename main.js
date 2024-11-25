@@ -21,8 +21,10 @@ const orientationSelect = document.querySelector('#orientation');
 const colorSelect = document.querySelector('#color');
 const applyFiltersBtn = document.querySelector('#applyFilters');
 
+
 let page = 1; // Página inicial
 const perPage = 20; // Número de imágenes por página
+const maxPages = 10; // Número de imágenes por página
 let currentQuery = ''; // Consulta actual
 let currentOrientation = ''; // Orientación seleccionada
 let currentColor = ''; // Color seleccionado
@@ -42,14 +44,23 @@ const buildApiUrl = (query, page) => {
 
 const searchPhotos = async (keyword, reset = false) => {
   const apiUrl = buildApiUrl(keyword, page);
+  const messageContainer = document.querySelector('#messageContainer');
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
+    const remainingCalls = response.headers.get('x-ratelimit-remaining');
+    localStorage.setItem('remaining', remainingCalls);
+    updateRemainingCallsDisplay(remainingCalls);
+
     if (!data.results.length) {
-      console.log("Busca otra cosa por favor");
+      messageContainer.style.display = 'block';
+      messageContainer.innerHTML = `<p>Lo sentimos no hay resultados para <strong>${keyword}</strong> (y no me extraña).</p>
+      <p>Busca otra cosa por favor.</p>`;
     }
     else {
+      messageContainer.style.display = 'none';
       loading.style.display = 'block';
+      document.body.classList.add('gallery-on');
       if (reset) {
         imageContainer.innerHTML = '';
         loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
@@ -67,26 +78,8 @@ const searchPhotos = async (keyword, reset = false) => {
   }
 }
 
-const fetchRemainingCalls = async () => {
-  try {
-    const response = await fetch(`https://api.unsplash.com/photos?client_id=${apiKey}`, {
-      headers: {
-        Authorization: apiKey,
-        'Cache-Control': 'no-cache' // Evita respuestas almacenada 
-      }
-    });
-    console.log(response.headers);
-    console.log('Consultas restantes:', response.headers.get('X-Ratelimit-Remaining'));
-    const remainingCalls = response.headers.get('X-Ratelimit-Remaining');
-    return remainingCalls;
-  } catch (error) {
-    console.error('Error al obtener las llamadas restantes:', error);
-    return null;
-  }
-}
-
 const updateRemainingCallsDisplay = (remainingCalls) => {
-  const displayElement = document.querySelector('#remainingCalls');
+  const displayElement = document.querySelector('#remaining');
   if (remainingCalls !== null) {
     displayElement.textContent = `Llamadas restantes: ${remainingCalls}`;
   } else {
@@ -95,17 +88,14 @@ const updateRemainingCallsDisplay = (remainingCalls) => {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Obtén el número de llamadas restantes
-  const remainingCalls = await fetchRemainingCalls();
-
-  // Actualiza el componente con el valor obtenido
+  const remainingCalls = localStorage.getItem('remaining')? localStorage.getItem('remaining'): '50';
   updateRemainingCallsDisplay(remainingCalls);
 });
-
 
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
+  imageContainer.innerHTML = '';
   currentQuery = input.value.trim();  // Obtener el término de búsqueda y lo almacena
   currentOrientation = ''; // Reiniciar orientación
   currentColor = ''; // Reiniciar color
@@ -115,7 +105,7 @@ searchForm.addEventListener('submit', event => {
   input.value = '';
 });
 
-// muestra los filtrod
+// Muestra los filtros
 filtersBtn.addEventListener('click', () => {
   filtersContainer.style.display = 'flex';
 });
@@ -131,8 +121,12 @@ applyFiltersBtn.addEventListener('click', () => {
 
 // Función para manejar el scroll infinito
 const handleScroll = () => {
+  if (page === maxPages) {
+    return;
+  }
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   if (scrollTop + clientHeight >= scrollHeight - 10) {
+    document.querySelector('#loading').style.display = 'block';
     searchPhotos(currentQuery);
   }
 }

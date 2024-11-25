@@ -10,9 +10,9 @@ export const Gallery = () => {
   // Creo el contenedor para mostrar la info de carga
   const loading = document.createElement('div');
   loading.id = 'loading';
-  loading.classList.add('loading');
+  loading.classList.add('gallery-loading');
   loading.style.display= 'none';
-  loading.innerHTML = "Cargando más imágenes...";
+  loading.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-3x"></i>`;
   main.appendChild(loading);
 };
 

@@ -11,6 +11,7 @@ header {
   display: flex;
 	justify-content: space-between;
 	align-items: center;
+  gap: 20px;
 }
 
 .header__logo {
@@ -19,7 +20,7 @@ header {
 }
 
 .header__search {
-  flex-basis: 50%;
+  flex-basis: 70%;
   display: flex;
   gap: 20px;
   align-items: center;
@@ -53,4 +54,10 @@ header {
 
 .header__search-input:focus-visible {
   outline: 1px solid var(--darkgrey);
+}
+
+@media screen and (min-width: 481px) {
+  .header__search {
+    flex-basis: 50%;
+  }
 }

@@ -1,5 +1,6 @@
 .footer {
   position: fixed;
+  left: 0;
   bottom: 0;
   width: 100%;
   display: flex;
@@ -13,7 +14,25 @@
 }
 
 .footer__text {
-  padding: 2rem;
-  background-color: var(--dark);
-  text-align: center;
+	padding: 2rem;
+	background-color: var(--dark);
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	font-size: .8rem;
 }
+
+.footer__text #remaining {
+  font-size: initial;
+  font-weight: 500;;
+}
+
+.footer__logo {
+  margin-top: 2rem;
+  filter: invert();
+}
+
+body.gallery-on .footer {
+  position: relative;
+} 

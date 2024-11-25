@@ -6,7 +6,10 @@ const footerContent = (calls) => `
   <div class="footer__pattern"></div>
   <div class="footer__text">  
     <p>Para mostrar el contenido, esta página hace uso de la conexión gratuita a la API de Unsplash, la cual permite hacer 50 llamadas cada hora</p>
-    <p id="remainingCalls"></p>
+    <p id="remaining"></p>
+    <figure class="footer__logo">
+      <img src="../../assets/images/fotomatown.svg" alt="Fotomatown">
+    </figure>
     <p>©${Year} Alberto Sancho</p>
   </div>
 `;

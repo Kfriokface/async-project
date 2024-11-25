@@ -2,11 +2,7 @@
   column-count: 4; /* Número de columnas */
   column-gap: 16px; /* Espacio entre columnas */
   width: 90%;
-  margin: 7rem auto 15rem;
-}
-
-body.filters-on .gallery {
-  margin-top: 9rem;
+  margin: auto;
 }
 
 .gallery-item {
@@ -20,6 +16,11 @@ body.filters-on .gallery {
   width: 100%;
   display: block;
   border-radius: 8px;
+}
+
+.gallery-loading {
+  text-align: center;
+  padding-top: 2rem;
 }
 
 @media (max-width: 768px) {
