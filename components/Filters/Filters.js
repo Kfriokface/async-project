@@ -40,7 +40,6 @@ export const Filters = () => {
   //contenedor de filtros
   const filter = document.createElement('section');
   filter.id = 'filters';
-  filter.style.display = 'none';
   filter.innerHTML = filtersContents();
   document.querySelector("header").append(filter);
 }

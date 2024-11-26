@@ -5,6 +5,7 @@ header {
 	width: 100%;
 	background: var(--light);
 	padding: 1rem;
+  box-shadow: 0 -1px 5px var(--darkgrey);
 }
 
 .header__wrapper {

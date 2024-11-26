@@ -1,0 +1,19 @@
+#filters {
+  padding: 2rem 0 0;
+  font-size: 14px;
+  align-items: center;
+  gap: 10px;
+  display: none;
+}
+
+#applyFilters {
+  margin-left: 1rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--light);
+  background-color: var(--darkgrey);
+}
+
+#applyFilters:hover {
+  background-color: var(--dark);
+}

@@ -2,7 +2,7 @@ import './style.css';
 
 import { Header } from './components/Header/Header';
 import { Filters } from './components/Filters/Filters';
-import { Gallery, loadedImageIds, galleryPhotos } from './components/Gallery/Gallery';
+import { Gallery, loadedImageIds, galleryPhotos, showModal } from './components/Gallery/Gallery';
 import { Footer } from './components/Footer/Footer';
 
 Header();
@@ -24,7 +24,7 @@ const applyFiltersBtn = document.querySelector('#applyFilters');
 
 let page = 1; // Página inicial
 const perPage = 20; // Número de imágenes por página
-const maxPages = 10; // Número de imágenes por página
+const maxPages = 3; // Número de imágenes por página
 let currentQuery = ''; // Consulta actual
 let currentOrientation = ''; // Orientación seleccionada
 let currentColor = ''; // Color seleccionado
@@ -48,6 +48,7 @@ const searchPhotos = async (keyword, reset = false) => {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
+    console.log(data.results);
     const remainingCalls = response.headers.get('x-ratelimit-remaining');
     localStorage.setItem('remaining', remainingCalls);
     updateRemainingCallsDisplay(remainingCalls);
@@ -67,9 +68,13 @@ const searchPhotos = async (keyword, reset = false) => {
       }  
       // Se mandan los resultados al constructor de la galería
       galleryPhotos(imageContainer, data.results);
+      showModal();
       filtersBtn.style.display = 'flex'; // Mostrar los filtros después de buscar
       document.body.classList.add('filters-on');
-      page++;
+
+      if (data.total_pages >  1) {
+        page++;
+      }
     }
   } catch (error) {
     console.error('Error al cargar imágenes:', error);
@@ -107,7 +112,7 @@ searchForm.addEventListener('submit', event => {
 
 // Muestra los filtros
 filtersBtn.addEventListener('click', () => {
-  filtersContainer.style.display = 'flex';
+  filtersContainer.classList.toggle("d-flex");
 });
 
 // Evento para manejar la aplicación de filtros
@@ -121,7 +126,7 @@ applyFiltersBtn.addEventListener('click', () => {
 
 // Función para manejar el scroll infinito
 const handleScroll = () => {
-  if (page === maxPages) {
+  if (page > maxPages) {
     return;
   }
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
@@ -131,5 +136,4 @@ const handleScroll = () => {
   }
 }
 
-// Escuchar el evento de scroll
 window.addEventListener('scroll', handleScroll);
