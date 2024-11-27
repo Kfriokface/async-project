@@ -68,10 +68,6 @@ main {
   margin: 7rem auto 2rem;
 }
 
-body.filters-on main {
-  margin-top: 11rem;
-}
-
 body.modal-on {
   overflow-y: hidden;
 }
