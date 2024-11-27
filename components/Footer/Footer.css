@@ -9,7 +9,7 @@
 }
 
 .footer__pattern {
-  background: url(../../assets/images/city_pattern.svg) repeat-x;
+  background: url(/images/city_pattern.svg) repeat-x;
   height: 110px;
 }
 

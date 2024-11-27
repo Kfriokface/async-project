@@ -4,8 +4,8 @@ const headerContent = () => `
   <div class="header__wrapper">
     <figure class="header__logo">
       <picture>
-        <source srcset="../../assets/images/fotomatown.svg" media="(min-width: 481px)" />
-        <img src="../../assets/images/fotomatown_sm.svg" alt="Fotomatown"/>
+        <source srcset="/images/fotomatown.svg" media="(min-width: 481px)" />
+        <img src="/images/fotomatown_sm.svg" alt="Fotomatown"/>
       </picture>
     </figure>
     <div class="header__search">
