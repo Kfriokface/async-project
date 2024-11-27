@@ -1,4 +1,5 @@
 import './style.css';
+import lazySizes from 'lazysizes';
 
 import { Header } from './components/Header/Header';
 import { Filters } from './components/Filters/Filters';
@@ -19,12 +20,14 @@ const filtersBtn = document.querySelector('#filterBtn');
 const filtersContainer = document.querySelector('#filters');
 const orientationSelect = document.querySelector('#orientation');
 const colorSelect = document.querySelector('#color');
+const pagesInput = document.querySelector('#pages');
 const applyFiltersBtn = document.querySelector('#applyFilters');
-
+const messageContainer = document.querySelector('#messageContainer');
 
 let page = 1; // Página inicial
+let totalPages; // Límite de páginas
 const perPage = 20; // Número de imágenes por página
-const maxPages = 3; // Número de imágenes por página
+let maxPages = 3; // Número de páginas por búsqueda (cada página consume una consulta)
 let currentQuery = ''; // Consulta actual
 let currentOrientation = ''; // Orientación seleccionada
 let currentColor = ''; // Color seleccionado
@@ -69,10 +72,10 @@ const searchPhotos = async (keyword, reset = false) => {
       // Se mandan los resultados al constructor de la galería
       galleryPhotos(imageContainer, data.results);
       showModal();
-      filtersBtn.style.display = 'flex'; // Mostrar los filtros después de buscar
-      document.body.classList.add('filters-on');
+      filtersBtn.style.display = 'flex';
 
-      if (data.total_pages >  1) {
+      totalPages = data.total_pages;
+      if (totalPages >  1) {
         page++;
       }
     }
@@ -100,33 +103,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
+  document.body.classList.remove(...document.body.classList);
+  filtersBtn.style.display = 'none';
   imageContainer.innerHTML = '';
-  currentQuery = input.value.trim();  // Obtener el término de búsqueda y lo almacena
-  currentOrientation = ''; // Reiniciar orientación
-  currentColor = ''; // Reiniciar color
-  page = 1; // Reiniciar a la primera página
+  currentQuery = input.value.trim();
+  currentOrientation = '';
+  currentColor = '';
+  page = 1; //
 
-  searchPhotos(currentQuery, true); //Carga imágenes iniciales con el keyword
+  searchPhotos(currentQuery, true);
   input.value = '';
 });
 
 // Muestra los filtros
 filtersBtn.addEventListener('click', () => {
+  document.body.classList.toggle('filters-on');
   filtersContainer.classList.toggle("d-flex");
+});
+
+// Validar filtros
+pagesInput.addEventListener('input', () => {
+  const valor = parseInt(pagesInput.value, 10);
+  const min = parseInt(pagesInput.min, 10);
+  const max = parseInt(pagesInput.max, 10);
+
+  if (valor < min || valor > max) {
+    messageContainer.style.display = 'block';
+    messageContainer.innerHTML = `El valor debe estar entre ${min} y ${max}.`;
+  } else {
+    messageContainer.style.display = 'none';
+    messageContainer.innerHTML = '';
+  }
 });
 
 // Evento para manejar la aplicación de filtros
 applyFiltersBtn.addEventListener('click', () => {
-  currentOrientation = orientationSelect.value; // Obtener orientación seleccionada
-  currentColor = colorSelect.value; // Obtener color seleccionado
-  page = 1; // Reiniciar a la primera página
+  currentOrientation = orientationSelect.value;
+  currentColor = colorSelect.value;
+  maxPages = parseInt(pagesInput.value);
+  page = 1;
 
-  searchPhotos(currentQuery, true); // Cargar imágenes con filtros aplicados
+  searchPhotos(currentQuery, true);
 });
 
 // Función para manejar el scroll infinito
 const handleScroll = () => {
-  if (page > maxPages) {
+  if (page > maxPages || totalPages <= 1) {
     return;
   }
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;

@@ -27,6 +27,8 @@ const filtersContents = () =>`
     <option value="teal">Turquesa</option>
     <option value="blue">Azul</option>
   </select>
+  <label for="pages">Límite de páginas:</label>
+  <input type="number" id="pages" name="pages" min="1" max="10" value="3" />
   <button id="applyFilters">Aplicar Filtros</button>
 `;
 

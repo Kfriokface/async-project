@@ -19,9 +19,11 @@ export const Gallery = () => {
   modal.id = 'modal';
   modal.classList.add('modal');
   modal.innerHTML = `
-    <span id="modalClose" class="modal__close"><i class="fa-solid fa-xmark"></i></span>
-    <img id="modalImg">
-    <div id="modalCaption" class="modal__caption"></div>
+    <div class="modal__wrapper">
+      <span id="modalClose" class="modal__close"><i class="fa-solid fa-xmark"></i></span>
+      <img id="modalImg" class="modal__img">
+      <div id="modalCaption" class="modal__caption"></div>
+    </div>
   `;
   main.appendChild(modal);
 };
@@ -38,14 +40,13 @@ export const galleryPhotos = (container, photos) => {
       img.alt = photo.alt_description || 'Unsplash Image';
       img.setAttribute('data-id', photo.id);
       img.setAttribute('data-img-raw', photo.urls.small);
-      img.setAttribute('loading', 'lazy');
+      img.classList.add('lazyload');
       photoDiv.appendChild(img);
       container.appendChild(photoDiv);
 
       loadedImageIds.add(photo.id);
     }
   });
-
 }
 
 export const showModal = () => {
@@ -61,7 +62,9 @@ export const showModal = () => {
     img.addEventListener('click', (event) => {
       event.preventDefault();
       modal.style.display = 'block';
+      document.body.classList.add('modal-on');
       modalImage.src = img.dataset.imgRaw;
+      modalImage.classList.add('lazyload');
       caption.textContent = img.alt || 'Sin descripción';
     });
   });
@@ -70,6 +73,7 @@ export const showModal = () => {
   closeModal.addEventListener('click', (event) => {
     event.preventDefault();
     modal.style.display = 'none';
+    document.body.classList.remove('modal-on');
   });
 
   // Cerrar el modal al hacer clic fuera de la imagen
@@ -77,6 +81,7 @@ export const showModal = () => {
     event.preventDefault();
     if (event.target === modal) {
       modal.style.display = 'none';
+      document.body.classList.remove('modal-on');
     }
   });
 }
