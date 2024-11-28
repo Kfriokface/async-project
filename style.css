@@ -92,6 +92,7 @@ body.modal-on {
   top: 1px;
   line-height: 1;
 }
+
 button:hover .material-icons {
   color: var(--dark);
   transition: all .2s;

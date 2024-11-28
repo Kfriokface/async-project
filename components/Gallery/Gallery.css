@@ -6,6 +6,7 @@
 }
 
 .gallery-item {
+  position: relative;
   background-color: #eee;
   border-radius: 8px;
   margin-bottom: 16px;
@@ -27,6 +28,22 @@
   padding-top: 2rem;
 }
 
+.gallery-item .likes {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	background:#14141442;
+	padding: 4px 8px;
+	border-radius: 5px;
+	font-size: .6rem;
+	color: var(--light);
+}
+
+.gallery-item .likes i {
+	margin-right: 5px;
+  color: var(--light);
+}
+
 @media (max-width: 768px) {
   .gallery {
     column-count: 2;
@@ -38,7 +55,6 @@
     column-count: 1;
   }
 }
-
 
 /* Modal */
 

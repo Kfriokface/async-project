@@ -7,12 +7,25 @@
 	flex-wrap: wrap;
 }
 
-.filter__item {
-
-}
-
 .filter__item label {
   margin-right: 5px;
+}
+
+.filter__item select,
+.filter__item input {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--lightgrey);
+}
+
+.filter__item input[type="number"] {
+  padding-right: 0;
+}
+
+.filter__item select:focus,
+.filter__item input:focus {
+  outline: 2px solid var(--darkgrey);
 }
 
 .filters button {
@@ -34,7 +47,6 @@ body.filters-on main {
 
 @media screen and (min-width: 576px) {
   .filters {
-    gap: 10px;
     display: none;
     flex-wrap: nowrap;
     justify-content: flex-start;

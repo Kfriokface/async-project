@@ -35,15 +35,28 @@ export const galleryPhotos = (container, photos) => {
     if (!loadedImageIds.has(photo.id)) {
       const photoDiv = document.createElement('div');
       photoDiv.classList.add('gallery-item');
-      const img = document.createElement('img');
-      img.src = photo.urls.small;
-      img.alt = photo.alt_description || 'Unsplash Image';
-      img.setAttribute('data-id', photo.id);
-      img.setAttribute('data-img-raw', photo.urls.small);
-      img.classList.add('lazyload');
-      photoDiv.appendChild(img);
-      container.appendChild(photoDiv);
 
+      //img
+      const img = document.createElement('img');
+      //datos necesarios para salida.
+      img.src = photo.urls.small;
+      img.alt = photo.alt_description || 'Sin descripción';
+      img.classList.add('lazyload');
+      //para el modal los almaceno en data attributes. De este modo no es necesario consumir otra consulta a posteriori.
+      img.setAttribute('data-autor', photo.user.name);
+      img.setAttribute('data-img', photo.urls.regular);
+      img.setAttribute('data-created', photo.created_at);
+      img.setAttribute('data-color', photo.color);
+      
+      photoDiv.appendChild(img);
+
+      //likes
+      const likes = document.createElement('span');
+      likes.classList.add('likes');
+      likes.innerHTML = `<i class="fa-regular fa-heart"></i>${photo.likes}`;
+      photoDiv.appendChild(likes);
+
+      container.appendChild(photoDiv);
       loadedImageIds.add(photo.id);
     }
   });
@@ -54,7 +67,6 @@ export const showModal = () => {
   const galleryImages = document.querySelectorAll('.gallery-item img');
   const modal = document.querySelector('#modal');
   const modalImage = document.querySelector('#modalImg');
-  const caption = document.querySelector('#modalCaption');
   const closeModal = document.querySelector('#modalClose');
 
   // Añadir evento a cada imagen
@@ -63,9 +75,19 @@ export const showModal = () => {
       event.preventDefault();
       modal.style.display = 'block';
       document.body.classList.add('modal-on');
-      modalImage.src = img.dataset.imgRaw;
-      modalImage.classList.add('lazyload');
-      caption.textContent = img.alt || 'Sin descripción';
+      const caption = (img.alt)? img.alt.trim().charAt(0).toUpperCase() + img.alt.trim().slice(1): 'Sin descripción';
+      modal.innerHTML = `
+        <div class="modal__wrapper" style="background-color: ${img.dataset.color}">
+          <figure class="modal__image">
+            <img src=${img.dataset.img} alt="${caption}" >
+            <figcaption>${caption}</figcaption>
+          </figure>
+          <div class="modal__autor">
+            <p>Autor: ${img.dataset.autor}</p>
+            <p>Creada: ${img.dataset.created}</p>
+          </div>
+        </div>
+      `;
     });
   });
 

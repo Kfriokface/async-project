@@ -7,7 +7,7 @@ const filtersIcon = () => `
 const filtersContents = () =>`
   <div class="filter__item">
   <label for="orientation">Orientación:</label>
-    <select id="orientation">
+    <select id="orientation" name="orientation">
       <option value="">Cualquier orientación</option>
       <option value="landscape">Horizontal</option>
       <option value="portrait">Vertical</option>
@@ -16,7 +16,7 @@ const filtersContents = () =>`
   </div>
   <div class="filter__item">
     <label for="color">Color:</label>
-    <select id="color">
+    <select id="color" name="color">
       <option value="">Cualquier color</option>
       <option value="black_and_white">Blanco y negro</option>
       <option value="black">Negro</option>
@@ -31,9 +31,16 @@ const filtersContents = () =>`
       <option value="blue">Azul</option>
     </select>
   </div>
-  <div class="filter_item">
+  <div class="filter__item">
     <label for="pages">Límite de páginas:</label>
-    <input type="number" id="pages" name="pages" min="1" max="10" value="3" />
+    <input type="number" id="pages" name="pages" min="1" max="10" value="3">
+  </div>
+  <div class="filter__item">
+    <label for="order">Ordenar:</label>
+    <select id="order" name="order">
+      <option value="relevant">Relevantes</option>
+      <option value="latest">Últimas</option>
+    </select>
   </div> 
   <button id="applyFilters">Aplicar Filtros</button>
 `;

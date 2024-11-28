@@ -12,6 +12,9 @@ Gallery();
 Footer();
 
 const apiKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+
+//settings inciales
+const body = document.body;
 const imageContainer = document.querySelector('#galleryContainer');
 const loading = document.querySelector('#loading');
 const searchForm = document.querySelector('#searchPhotos');
@@ -21,6 +24,7 @@ const filtersContainer = document.querySelector('#filters');
 const orientationSelect = document.querySelector('#orientation');
 const colorSelect = document.querySelector('#color');
 const pagesInput = document.querySelector('#pages');
+const orderBy = document.querySelector('#order');
 const applyFiltersBtn = document.querySelector('#applyFilters');
 const messageContainer = document.querySelector('#messageContainer');
 
@@ -31,6 +35,7 @@ let maxPages = 3; // Número de páginas por búsqueda (cada página consume una
 let currentQuery = ''; // Consulta actual
 let currentOrientation = ''; // Orientación seleccionada
 let currentColor = ''; // Color seleccionado
+let currentOrder = ''; // Color seleccionado
 
 // Función para construir la URL de la API
 const buildApiUrl = (query, page) => {
@@ -42,9 +47,18 @@ const buildApiUrl = (query, page) => {
   if (currentColor) {
     apiUrl += `&color=${currentColor}`;
   }
+  if (currentOrder) {
+    apiUrl += `&order_by=${currentOrder}`;
+  }
+  console.log(apiUrl);
   return apiUrl;
 }
 
+/*
+ * Función para buscar de imágenes
+ * param keyword: término de búsqueda
+ * param reset: vacia la información previa
+ */
 const searchPhotos = async (keyword, reset = false) => {
   const apiUrl = buildApiUrl(keyword, page);
   const messageContainer = document.querySelector('#messageContainer');
@@ -56,18 +70,25 @@ const searchPhotos = async (keyword, reset = false) => {
     localStorage.setItem('remaining', remainingCalls);
     updateRemainingCallsDisplay(remainingCalls);
 
-    if (!data.results.length) {
+    if ( !data.results.length ) {
+      if (reset) {
+        imageContainer.innerHTML = '';
+        loadedImageIds.clear();
+      }
+      if ( body.classList.contains('gallery-on') ) {
+        body.classList.remove('gallery-on');
+      }
       messageContainer.style.display = 'block';
-      messageContainer.innerHTML = `<p>Lo sentimos no hay resultados para <strong>${keyword}</strong> (y no me extraña).</p>
+      messageContainer.innerHTML = `<p>Lo sentimos no hay resultados para <strong>${keyword} ${currentOrientation} ${currentColor}</strong> (y no me extraña).</p>
       <p>Busca otra cosa por favor.</p>`;
     }
     else {
       messageContainer.style.display = 'none';
       loading.style.display = 'block';
-      document.body.classList.add('gallery-on');
+      body.classList.add('gallery-on');
       if (reset) {
         imageContainer.innerHTML = '';
-        loadedImageIds.clear(); // Limpiar el conjunto de IDs cargados
+        loadedImageIds.clear();
       }  
       // Se mandan los resultados al constructor de la galería
       galleryPhotos(imageContainer, data.results);
@@ -80,30 +101,18 @@ const searchPhotos = async (keyword, reset = false) => {
       }
     }
   } catch (error) {
+    messageContainer.style.display = 'block';
+    messageContainer.innerHTML = `<p>En este momento no podemos mostrar imágenes, inténtalo de nuevo un poco más tarde. Gracias.</p>`;
     console.error('Error al cargar imágenes:', error);
   } finally {
-    loading.style.display = 'none'; // Ocultar "Cargando..."
+    loading.style.display = 'none'; //Se oculta el loading cada llamada del scroll infinito.
   }
 }
-
-const updateRemainingCallsDisplay = (remainingCalls) => {
-  const displayElement = document.querySelector('#remaining');
-  if (remainingCalls !== null) {
-    displayElement.textContent = `Llamadas restantes: ${remainingCalls}`;
-  } else {
-    displayElement.textContent = 'Error al obtener el número de llamadas restantes.';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-  const remainingCalls = localStorage.getItem('remaining')? localStorage.getItem('remaining'): '50';
-  updateRemainingCallsDisplay(remainingCalls);
-});
 
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
-  document.body.classList.remove(...document.body.classList);
+  body.classList.remove(...body.classList);
   filtersBtn.style.display = 'none';
   imageContainer.innerHTML = '';
   currentQuery = input.value.trim();
@@ -117,7 +126,7 @@ searchForm.addEventListener('submit', event => {
 
 // Muestra los filtros
 filtersBtn.addEventListener('click', () => {
-  document.body.classList.toggle('filters-on');
+  body.classList.toggle('filters-on');
   filtersContainer.classList.toggle("d-flex");
 });
 
@@ -140,10 +149,29 @@ pagesInput.addEventListener('input', () => {
 applyFiltersBtn.addEventListener('click', () => {
   currentOrientation = orientationSelect.value;
   currentColor = colorSelect.value;
+  currentOrder = orderBy.value;
   maxPages = parseInt(pagesInput.value);
   page = 1;
-
   searchPhotos(currentQuery, true);
+});
+
+/*
+ * Se actualizan las consultas restantes sobre el total 
+ * El sistema no da información del intervalo de tiempo para resetear los contadores cada hora
+ * Creo que la API debe tener algún sistema de caché que hace que las respuestas de las cabeceras a veces no sean correctas
+ */
+const updateRemainingCallsDisplay = (remainingCalls) => {
+  const displayElement = document.querySelector('#remaining');
+  if (remainingCalls !== null) {
+    displayElement.textContent = `Llamadas restantes: ${remainingCalls}`;
+  } else {
+    displayElement.textContent = 'Error al obtener el número de llamadas restantes.';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const remainingCalls = localStorage.getItem('remaining')? localStorage.getItem('remaining'): '50';
+  updateRemainingCallsDisplay(remainingCalls);
 });
 
 // Función para manejar el scroll infinito
