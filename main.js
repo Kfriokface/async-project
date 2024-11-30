@@ -3,7 +3,7 @@ import lazySizes from 'lazysizes';
 
 import { Header } from './components/Header/Header';
 import { Filters } from './components/Filters/Filters';
-import { Gallery, loadedImageIds, galleryPhotos, showModal } from './components/Gallery/Gallery';
+import { Gallery, loadedImageIds, galleryPhotos, showModal, closeModal } from './components/Gallery/Gallery';
 import { Footer } from './components/Footer/Footer';
 
 Header();
@@ -86,6 +86,7 @@ const searchPhotos = async (keyword, reset = false) => {
       messageContainer.style.display = 'none';
       loading.style.display = 'block';
       body.classList.add('gallery-on');
+
       if (reset) {
         imageContainer.innerHTML = '';
         loadedImageIds.clear();
@@ -109,6 +110,10 @@ const searchPhotos = async (keyword, reset = false) => {
   }
 }
 
+// Añado las funciones para cerrar el modal
+closeModal(document.querySelector('#modal'));
+closeModal(document.querySelector('#closeModal'));
+
 // Recoge el valor del formulario
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -127,7 +132,6 @@ searchForm.addEventListener('submit', event => {
 // Muestra los filtros
 filtersBtn.addEventListener('click', () => {
   body.classList.toggle('filters-on');
-  filtersContainer.classList.toggle("d-flex");
 });
 
 // Validar filtros

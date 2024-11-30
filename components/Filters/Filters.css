@@ -41,6 +41,10 @@
   background-color: var(--dark);
 }
 
+body.filters-on .filters {
+  display: flex;
+}
+
 body.filters-on main {
   margin-top: 13rem;
 }

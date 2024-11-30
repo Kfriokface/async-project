@@ -58,93 +58,87 @@
 
 /* Modal */
 
-#myImg {
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
+body.modal-on {
+  overflow-y: hidden;
 }
 
-#myImg:hover {opacity: 0.7;}
-
-/* The Modal (background) */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.9);
-  z-index: 99;
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.9);
+	z-index: 99;
+	animation: fadeIn 0.5s ease forwards;
+	padding: 5rem;
 }
 
-/* Modal Content (image) */
 .modal__wrapper {
-  position: absolute;
-  top: 50%;
+	position: absolute;
+	width: calc(100% - 10rem);
+	margin: auto;
+	padding: .6rem;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--light);
+	max-height: 80%;
+	overflow: hidden;
+	transform: scale(0.1);
+	animation: slideIn 0.5s ease forwards;
+}
+
+.modal__wrapper img {
+	max-width: 100%;
+	height: 80%;
+	object-fit: cover;
+}
+
+.modal__info {
+	position: absolute;
+	bottom: 15px;
   left: 50%;
-  transform: translate(-50%,-50%);
-  margin: auto;
-  display: block;
+	transform: translateX(-50%);
+	width: calc(100% - 30px);
+  padding: .5rem;
+	background-color: rgba(0,0,0,0.7);
+	color: var(--light);
+  font-size: .8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal__info .caption {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--light);
 }
 
 .modal__close {
-	position: absolute;
-	top: 5px;
-	right: 10px;
-	z-index: 9999;
+  text-align: right;
 }
 
-.modal__img {
-  width: 100%;
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 }
 
-/* Caption of Modal Image */
-#caption {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-  text-align: center;
-  color: #ccc;
-  padding: 10px 0;
-  height: 150px;
-}
-
-/* Add Animation */
-.modal-content, #caption {  
-  animation-name: zoom;
-  animation-duration: 0.6s;
-}
-
-@keyframes zoom {
-  from {transform: scale(0.1)} 
-  to {transform: scale(1)}
-}
-
-/* The Close Button */
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.close:hover,
-.close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
-  .modal-content {
-    width: 100%;
+@keyframes slideIn {
+  from {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

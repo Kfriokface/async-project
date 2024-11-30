@@ -20,9 +20,13 @@ export const Gallery = () => {
   modal.classList.add('modal');
   modal.innerHTML = `
     <div class="modal__wrapper">
-      <span id="modalClose" class="modal__close"><i class="fa-solid fa-xmark"></i></span>
-      <img id="modalImg" class="modal__img">
-      <div id="modalCaption" class="modal__caption"></div>
+      <span class="close__modal" id="closeModal"><i class="fa-solid fa-xmark"></i></span>
+      <img src="" alt="" >  
+      <div class="modal__info">
+        <p class="caption"></p>
+        <p class="autor"></p>
+        <p class="creado"></p>
+      </div>
     </div>
   `;
   main.appendChild(modal);
@@ -63,47 +67,36 @@ export const galleryPhotos = (container, photos) => {
 }
 
 export const showModal = () => {
-  // Selección de elementos
   const galleryImages = document.querySelectorAll('.gallery-item img');
-  const modal = document.querySelector('#modal');
-  const modalImage = document.querySelector('#modalImg');
-  const closeModal = document.querySelector('#modalClose');
-
-  // Añadir evento a cada imagen
   galleryImages.forEach(img => {
     img.addEventListener('click', (event) => {
       event.preventDefault();
-      modal.style.display = 'block';
-      document.body.classList.add('modal-on');
-      const caption = (img.alt)? img.alt.trim().charAt(0).toUpperCase() + img.alt.trim().slice(1): 'Sin descripción';
-      modal.innerHTML = `
-        <div class="modal__wrapper" style="background-color: ${img.dataset.color}">
-          <figure class="modal__image">
-            <img src=${img.dataset.img} alt="${caption}" >
-            <figcaption>${caption}</figcaption>
-          </figure>
-          <div class="modal__autor">
-            <p>Autor: ${img.dataset.autor}</p>
-            <p>Creada: ${img.dataset.created}</p>
-          </div>
-        </div>
-      `;
+      buildModal(img);
     });
   });
+}
 
-  // Cerrar el modal al hacer clic en la 'X'
-  closeModal.addEventListener('click', (event) => {
+// Construye el contenido del modal
+const buildModal = (img) => {
+  const modalImg = document.querySelector('#modal img');
+  const modalCaption = document.querySelector('#modal .caption');
+  const modalAuthor = document.querySelector('#modal .autor');
+  const modalCreated = document.querySelector('#modal .creado');
+  const caption = (img.alt)? img.alt.trim().charAt(0).toUpperCase() + img.alt.trim().slice(1): 'Sin descripción';
+  modalImg.src = img.dataset.img;
+  modalImg.alt = caption;
+  modalCaption.innerHTML = caption;
+  modalAuthor.innerHTML = img.dataset.autor;
+  modalCreated.innerHTML = img.dataset.created;
+
+  modal.style.display = 'block';
+  document.body.classList.add('modal-on');
+}
+
+export const closeModal = (selector) => {
+  selector.addEventListener('click', (event) => {
     event.preventDefault();
     modal.style.display = 'none';
     document.body.classList.remove('modal-on');
-  });
-
-  // Cerrar el modal al hacer clic fuera de la imagen
-  modal.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (event.target === modal) {
-      modal.style.display = 'none';
-      document.body.classList.remove('modal-on');
-    }
   });
 }
