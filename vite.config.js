@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import postcss from './postcss.config.js';
 
 export default defineConfig({
   base: './',
@@ -7,6 +6,6 @@ export default defineConfig({
     'process.env': {}
   },
   css: {
-    postcss
-  }
+    postcss: './postcss.config.js',
+  },
 })
