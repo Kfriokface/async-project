@@ -1,5 +1,5 @@
 .footer {
-  position: fixed;
+  position: block;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -39,7 +39,3 @@
 	height: auto;
 	display: block;
 }
-
-body.gallery-on .footer {
-  position: relative;
-} 

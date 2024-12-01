@@ -35,6 +35,14 @@ a:hover {
   color: #535bf2;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Hace que el body y html ocupen toda la ventana */
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   background-color: var(--lightgrey);
   margin: 0;
@@ -42,7 +50,6 @@ body {
   flex-direction: column;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
@@ -66,6 +73,7 @@ button:hover {
 
 main {
   padding: 2rem;
+  flex: 1;
 }
 
 .message {
