@@ -192,11 +192,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Función para manejar el scroll infinito
 const handleScroll = () => {
+  if (!currentQuery) {
+    return;
+  }
   if (page > maxPages || totalPages <= 1) {
     return;
   }
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 10) {
+  if (scrollTop + clientHeight >= scrollHeight - 30) {
     document.querySelector('#loading').style.display = 'block';
     searchPhotos(currentQuery);
   }
