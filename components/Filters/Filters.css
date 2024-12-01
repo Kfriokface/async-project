@@ -1,10 +1,12 @@
 .filters {
-	padding: 2rem 0 0;
+	margin-top: 1rem;
+  padding: 1rem 0 0;
 	font-size: 14px;
-	align-items: center;
-	gap: 20px;
+	gap: 15px;
 	display: none;
-	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: flex-start;
+	border-top: 1px dotted;
 }
 
 .filter__item label {
@@ -29,7 +31,6 @@
 }
 
 .filters button {
-	margin-left: 1rem;
 	padding: 5px 10px;
 	border-radius: 5px;
 	color: var(--light);
@@ -45,20 +46,13 @@ body.filters-on .filters {
   display: flex;
 }
 
-body.filters-on main {
-  margin-top: 13rem;
-}
-
 @media screen and (min-width: 576px) {
   .filters {
     display: none;
-    flex-wrap: nowrap;
+    flex-direction: row;
     justify-content: flex-start;
   }
   .filters button {
     flex-grow: 0;
-  }
-  body.filters-on main {
-    margin-top: 11rem;
   }
 }

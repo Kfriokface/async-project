@@ -20,7 +20,6 @@ const loading = document.querySelector('#loading');
 const searchForm = document.querySelector('#searchPhotos');
 const input = document.querySelector('#searchPhotos input');
 const filtersBtn = document.querySelector('#filterBtn');
-const filtersContainer = document.querySelector('#filters');
 const orientationSelect = document.querySelector('#orientation');
 const colorSelect = document.querySelector('#color');
 const pagesInput = document.querySelector('#pages');
@@ -34,8 +33,11 @@ const perPage = 20; // Número de imágenes por página
 let maxPages = 3; // Número de páginas por búsqueda (cada página consume una consulta)
 let currentQuery = ''; // Consulta actual
 let currentOrientation = ''; // Orientación seleccionada
+let currentOrientationText = ''; // Orientación seleccionada
 let currentColor = ''; // Color seleccionado
+let currentColorText = ''; // Color seleccionado
 let currentOrder = ''; // Color seleccionado
+
 
 // Función para construir la URL de la API
 const buildApiUrl = (query, page) => {
@@ -59,14 +61,14 @@ const buildApiUrl = (query, page) => {
  * param keyword: término de búsqueda
  * param reset: vacia la información previa
  */
-const searchPhotos = async (keyword, reset = false) => {
+const searchPhotos = async (keyword, reset = false, event) => {
   const apiUrl = buildApiUrl(keyword, page);
   const messageContainer = document.querySelector('#messageContainer');
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
     console.log(data.results);
-    const remainingCalls = response.headers.get('x-ratelimit-remaining');
+    const remainingCalls = response.headers.get('X-Ratelimit-Remaining');
     localStorage.setItem('remaining', remainingCalls);
     updateRemainingCallsDisplay(remainingCalls);
 
@@ -79,7 +81,7 @@ const searchPhotos = async (keyword, reset = false) => {
         body.classList.remove('gallery-on');
       }
       messageContainer.style.display = 'block';
-      messageContainer.innerHTML = `<p>Lo sentimos no hay resultados para <strong>${keyword} ${currentOrientation} ${currentColor}</strong> (y no me extraña).</p>
+      messageContainer.innerHTML = `<p>Lo sentimos no hay resultados para <strong>${keyword} ${currentOrientationText} ${currentColorText}</strong> (y no me extraña).</p>
       <p>Busca otra cosa por favor.</p>`;
     }
     else {
@@ -110,6 +112,13 @@ const searchPhotos = async (keyword, reset = false) => {
   }
 }
 
+// Función para copiar la altura
+const headerHeigth = () => {
+  const originHeigth = document.body.querySelector('header').offsetHeight + 'px';
+  document.body.querySelector('main').style.marginTop = originHeigth;
+}
+
+
 // Añado las funciones para cerrar el modal
 closeModal(document.querySelector('#modal'));
 closeModal(document.querySelector('#closeModal'));
@@ -132,6 +141,7 @@ searchForm.addEventListener('submit', event => {
 // Muestra los filtros
 filtersBtn.addEventListener('click', () => {
   body.classList.toggle('filters-on');
+  headerHeigth();
 });
 
 // Validar filtros
@@ -150,13 +160,15 @@ pagesInput.addEventListener('input', () => {
 });
 
 // Evento para manejar la aplicación de filtros
-applyFiltersBtn.addEventListener('click', () => {
+applyFiltersBtn.addEventListener('click', (event) => {
   currentOrientation = orientationSelect.value;
+  currentOrientationText = orientationSelect.selectedOptions[0].innerHTML;
   currentColor = colorSelect.value;
+  currentColorText = colorSelect.selectedOptions[0].innerHTML;
   currentOrder = orderBy.value;
   maxPages = parseInt(pagesInput.value);
   page = 1;
-  searchPhotos(currentQuery, true);
+  searchPhotos(currentQuery, true, event);
 });
 
 /*
@@ -190,4 +202,7 @@ const handleScroll = () => {
   }
 }
 
+window.addEventListener('resize', headerHeigth);
 window.addEventListener('scroll', handleScroll);
+
+headerHeigth();

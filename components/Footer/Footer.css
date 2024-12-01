@@ -29,8 +29,15 @@
 }
 
 .footer__logo {
-  margin-top: 2rem;
-  filter: invert();
+  margin: 2rem auto 0;
+	width: 200px;
+}
+
+.footer__logo img {
+	filter: invert();
+	width: 100%;
+	height: auto;
+	display: block;
 }
 
 body.gallery-on .footer {

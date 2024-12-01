@@ -20,7 +20,7 @@ export const Gallery = () => {
   modal.classList.add('modal');
   modal.innerHTML = `
     <div class="modal__wrapper">
-      <span class="close__modal" id="closeModal"><i class="fa-solid fa-xmark"></i></span>
+      <span class="modal__close" id="closeModal"><i class="fa-solid fa-xmark"></i></span>
       <img src="" alt="" >  
       <div class="modal__info">
         <p class="caption"></p>

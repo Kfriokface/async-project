@@ -8,7 +8,7 @@ const footerContent = (calls) => `
     <p>Para mostrar el contenido, esta página hace uso de la conexión gratuita a la API de Unsplash, la cual permite hacer 50 llamadas cada hora</p>
     <p id="remaining"></p>
     <figure class="footer__logo">
-      <img src="/images/fotomatown.svg" alt="Fotomatown">
+      <img src="/images/fotomatown.svg" alt="Fotomatown"/>
     </figure>
     <p>©${Year} Alberto Sancho</p>
   </div>
